@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Checkout</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+
+<body class="min-h-screen bg-gray-100 flex items-center justify-center p-4 font-sans">
+    <div class="w-full max-w-xs bg-white border border-gray-200 rounded-xl p-8 shadow-sm flex flex-col items-center gap-6">
+        <img src="https://razorpay.com/assets/razorpay-logo.svg" alt="Razorpay" class="h-7 w-auto" />
+        <button id="pay-btn" onclick="buy('6acd0248aace1530467c73e9')"
+            class="w-full py-2.5 px-4 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors">
+            Pay Now
+        </button>
+    </div>
+
+    <script>
+        async function buy(productId) {
+            const { data } = await axios.post(`/api/payments/${productId}/checkout`);
+
+            const rzp = new Razorpay({
+                key: data.keyId,
+                order_id: data.orderId,
+                amount: data.amount,
+                currency: data.currency,
+                name: "Kapda Co.",
+                handler: async (response) => {
+                    const res = await axios.post("/api/payments/verify", {
+                        orderId: response.razorpay_order_id,
+                        paymentId: response.razorpay_payment_id,
+                        signature: response.razorpay_signature,
+                    });
+                    alert(res.data.status === "success" ? "Payment Successful!" : "Payment Failed!");
+                }
+            });
+
+            rzp.open();
+        }
+    </script>
+</body>
+
+</html>

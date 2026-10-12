@@ -1,0 +1,24 @@
+{
+  "name": "day-37-payment-gateway",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js",
+    "dev": "npx nodemon server.js",
+    "seed": "node src/scripts/seedProducts.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "dotenv": "^18.0.6",
+    "express": "^5.2.1",
+    "mongoose": "^9.11.1",
+    "morgan": "^1.12.1",
+    "path": "^0.12.7",
+    "razorpay": "^2.9.8"
+  }
+}
