@@ -1,0 +1,6 @@
+packages:
+  - backend
+  - frontend
+allowBuilds:
+  esbuild: false
+  mongodb-memory-server: false
