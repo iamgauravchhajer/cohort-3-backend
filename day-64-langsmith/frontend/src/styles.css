@@ -1,0 +1,117 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", sans-serif;
+  --font-display: "Plus Jakarta Sans", sans-serif;
+  --color-canvas: #faf8f5;
+  --color-surface: #ffffff;
+  --color-ink: #1a1a18;
+  --color-muted: #5b655c;
+  --color-forest: #1b382b;
+  --color-forest-hover: #112a1e;
+  --color-on-forest: #ffffff;
+  --color-sage: #e5ede3;
+  --color-line: #dce0d7;
+  --color-error: #a33127;
+  --color-error-soft: #fff1ed;
+  --color-error-line: #e7c7c1;
+  --color-field: #fdfcf9;
+  --color-field-line: #cdd3c8;
+  --color-placeholder: #7b8178;
+  --color-chip-line: #bdcbbf;
+  --color-art-back: #d7dfd2;
+  --color-art-mid: #edf1e9;
+  --color-art-card: #fafcf7;
+  --color-art-line: #cbd6cc;
+  --color-bar-strong: #aab9a7;
+  --color-bar-soft: #d9e1d5;
+}
+
+/* Tailwind utilities read these variables, so overriding them re-themes the whole UI. */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-canvas: #111412;
+    --color-surface: #181d1a;
+    --color-ink: #ecefe9;
+    --color-muted: #a3ada4;
+    --color-forest: #a9d1b4;
+    --color-forest-hover: #c2e0ca;
+    --color-on-forest: #10241a;
+    --color-sage: #1c2a22;
+    --color-line: #2b332e;
+    --color-error: #f1998e;
+    --color-error-soft: #2a1715;
+    --color-error-line: #5a2b26;
+    --color-field: #151a17;
+    --color-field-line: #39433c;
+    --color-placeholder: #7d877f;
+    --color-chip-line: #3d5144;
+    --color-art-back: #2a3a30;
+    --color-art-mid: #22302a;
+    --color-art-card: #18201b;
+    --color-art-line: #34443a;
+    --color-bar-strong: #5f7a66;
+    --color-bar-soft: #2f3e35;
+  }
+}
+
+@layer base {
+  :root { color-scheme: light dark; }
+  body { @apply m-0 bg-canvas font-sans text-ink antialiased; }
+  button, a, input { -webkit-tap-highlight-color: transparent; }
+  button:not(:disabled), a { cursor: pointer; }
+  button:disabled { cursor: not-allowed; }
+  :focus-visible { @apply outline-2 outline-offset-4 outline-forest; }
+  ::selection { @apply bg-sage text-forest; }
+}
+
+@layer components {
+  .eyebrow { @apply text-[10px] font-semibold tracking-[0.18em] text-forest uppercase; }
+  .form-input {
+    @apply h-[52px] w-full rounded-lg border border-field-line bg-field px-4 text-sm text-ink transition-colors placeholder:text-placeholder focus:border-forest focus:bg-surface focus:outline-2 focus:outline-offset-2 focus:outline-forest;
+  }
+  .button-primary {
+    @apply inline-flex min-h-[52px] items-center justify-center gap-3 rounded-lg bg-forest px-5 py-3 text-[13px] font-semibold text-on-forest transition-colors hover:bg-forest-hover disabled:opacity-60;
+  }
+  .button-secondary {
+    @apply inline-flex min-h-11 items-center justify-center rounded-lg border border-line bg-transparent py-2 font-medium text-forest transition-colors hover:bg-sage disabled:opacity-60;
+  }
+  .text-link { @apply rounded-sm font-semibold text-forest underline-offset-4 hover:underline disabled:opacity-60; }
+}
+
+/* AI message Markdown. Built from theme tokens so it follows light/dark mode. */
+@layer components {
+  .markdown { @apply min-w-0 text-[15px] leading-7 break-words text-ink; }
+  .markdown > * + * { @apply mt-4; }
+  .markdown :is(h1, h2, h3, h4) { @apply mt-7 mb-3 font-display font-semibold tracking-[-0.3px] text-ink first:mt-0; }
+  .markdown h1 { @apply text-2xl; }
+  .markdown h2 { @apply text-xl; }
+  .markdown h3 { @apply text-lg; }
+  .markdown h4 { @apply text-base; }
+  .markdown strong { @apply font-semibold; }
+  .markdown a { @apply font-medium text-forest underline underline-offset-4; }
+  .markdown :is(ul, ol) { @apply space-y-1.5 pl-6; }
+  .markdown ul { @apply list-disc; }
+  .markdown ol { @apply list-decimal; }
+  .markdown li > :is(ul, ol) { @apply mt-1.5; }
+  .markdown li::marker { @apply text-muted; }
+  .markdown li:has(> input[type="checkbox"]) { @apply list-none -ml-6; }
+  .markdown input[type="checkbox"] { @apply mr-2 accent-forest; }
+  .markdown blockquote { @apply border-l-2 border-chip-line pl-4 text-muted; }
+  .markdown hr { @apply my-6 border-line; }
+  .markdown :not(pre) > code { @apply rounded-md bg-sage px-1.5 py-0.5 font-mono text-[0.85em] text-forest; }
+  .markdown pre { @apply overflow-x-auto rounded-xl border border-line bg-field p-4 text-[13px] leading-6; }
+  .markdown pre code { @apply font-mono; }
+  .markdown-table { @apply overflow-x-auto rounded-xl border border-line; }
+  .markdown table { @apply w-full border-collapse text-left text-sm; }
+  .markdown thead { @apply bg-sage; }
+  .markdown th { @apply px-4 py-2.5 font-semibold whitespace-nowrap text-forest; }
+  .markdown td { @apply border-t border-line px-4 py-2.5 align-top; }
+  .markdown tbody tr:nth-child(even) { @apply bg-field; }
+
+  /* Blinking caret after the last streamed block. */
+  .markdown-streaming .markdown > :last-child::after {
+    content: "";
+    @apply ml-0.5 inline-block h-4 w-1.5 translate-y-0.5 animate-pulse bg-forest align-baseline motion-reduce:animate-none;
+  }
+}
